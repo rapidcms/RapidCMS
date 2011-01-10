@@ -5,7 +5,7 @@
 <head>
 <title>&equiv;RapidCMS &raquo; Administration</title>
 <link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/3.2.0/build/cssreset/reset-min.css" />
-<link rel="stylesheet" type="text/css" href="../../css/main.css" />
+<link rel="stylesheet" type="text/css" href="css/main.css" />
 <style>
 </style>
 </head>
