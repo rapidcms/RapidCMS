@@ -1,7 +1,7 @@
 <?php
 // add this later <meta name="generator" content="WordPress">
 session_start();
-require_once("includes/config.php");
+require_once("rapid.php");	
 
 // if the config.php files hasn't been setup then go to the install page
 if (!defined('DBHOST')) {
@@ -10,11 +10,12 @@ if (!defined('DBHOST')) {
 
 // if we are logging out then unset uid
 if ($_GET['action'] == "logout") {
-	unset($_SESSION['uid']);
+	unset($_SESSION['rapid_uid']);
+	unset($_SESSION['rapid_uuid']);
 }
 
 // if we are not logged in.
-if (!isset($_SESSION['uid']))
+if (!isset($_SESSION['rapid_uid']))
 {
 	// if we havn't sent the login form?
 	if (!isset($_POST['txt_username']))
@@ -24,30 +25,43 @@ if (!isset($_SESSION['uid']))
 	}
 	else
 	{
-		include_once("includes/class.user.php");
-		$u = new user();
-		$u->username = $_POST['txt_username'];
-		$u->unencrypted_password = $_POST['pwd_password'];
-		$u->authenticate();
-		if ($u->error <> "")
+		//include_once("includes/class.user.php");
+		//$u = new user();
+		//global $user;
+		$cms->user->username = $_POST['txt_username'];
+		$cms->user->unencrypted_password = $_POST['pwd_password'];
+		$cms->user->authenticate();
+		if ($cms->user->error <> "")
 		{
 			include("header.php");
-			echo "<h1>Error</h1>";
-			echo $u->error;
+			$cms->hooks->add_action('admin_login_error_header');
+			echo "<h1>Oops. Try again.</h1>";
+			foreach ($cms->user->error as $error) {
+				echo "<p>$error</p>";
+			}
+			echo "<a href=\"./\">Give it another try</a>";
+			$cms->hooks->add_action('admin_login_error_footer');
 			include("footer.php");
 			exit();
 		}
 		
-		$_SESSION['uid'] = $u->id;
+		$_SESSION['rapid_uid'] = $cms->user->id;
+		$_SESSION['rapid_uuid'] = RAPID_UUID;
 		header('Location: #');
+		$cms->hooks->add_action('admin_login');
 	}
 }
 else 
 {
+	if ($_SESSION['rapid_uuid'] <> RAPID_UUID) {
+		echo "Invalid UUID<br />";
+		echo "<a href='?action=logout'>Logout and try again.</a>";
+		exit();
+	}
 	if (!isset($_GET['action']))
 	{
 		include("header.php");
-		echo "<h1>Blocks</h1>";
+		echo "<h2>Blocks</h2>";
 		// TODO: change this to the $cms->load_all() method once it's finished
 		$db = new mysqli(DBHOST, DBUSER, DBPASS, DBNAME);
 		$result = $db->query("SELECT * FROM blocks");
@@ -75,12 +89,13 @@ else
 		</table>
 		<p>[ <a href='?action=add_block'>Add New</a> ]</p>
 		<?php
-		include_once("includes/class.user.php");
-		$u = new user();
-		$u->id = $_SESSION['uid'];
-		$u->load();
-		if ($u->role == "administrator") {
-			echo "<h1>Users</h1>";
+		//include_once("includes/class.user.php");
+		//$cms->u = new user();
+		global $cms;
+		$cms->user->id = $_SESSION['uid'];
+		$cms->user->load();
+		if ($cms->user->role == "administrator") {
+			echo "<h2>Users</h2>";
 			$db = new mysqli(DBHOST, DBUSER, DBPASS, DBNAME);
 			$result = $db->query("SELECT * FROM users;");
 			echo "<table><tr>";
@@ -372,6 +387,7 @@ else
 function show_login_page()
 {
 	include("header.php");
+	$cms->hooks->add_action('admin_login_form');
 	?>
 	<div>
 		<h1>RapidCMS Login</h1>

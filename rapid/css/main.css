@@ -29,11 +29,12 @@ a.current,a:hover { color: #ff3333; }
 code { color: #633; }
 fieldset { margin-top: 20px; border: 1px solid #000; padding: 20px;}
 fieldset ul { margin-top: 0px; }
-form li { list-style: none; }
+form li { clear:both; list-style: none; }
 form li label { display: block; width: 175px; float: left; text-align: right; margin-right: 20px; }
 strong { font-weight: bold; }
 em { font-style: italic; }
 /* ID's */
+
 #wrapper {
 	padding: 20px;
 	width: 960px;

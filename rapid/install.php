@@ -15,12 +15,10 @@
 	<h2 class="logo">Fast, simple, powerful.</h2>
 <?php
 require_once("includes/config.php");
-// optionally we can open the file and eval the lines in the file... but that sounds dangerous, if we have problems writing the config.php file, then we'll have to do that.
 
 session_start();
 
-class install
-{
+class install {
 	public $db_host;
 	public $db_name;
 	public $db_user;
@@ -32,48 +30,36 @@ class install
 	
 	private $errors;
 	
-	public function __construct() 
-	{
+	public function __construct() {
 		if (defined('DBHOST')) { $this->db_host = DBHOST; }
 		if (defined('DBNAME')) { $this->db_name = DBNAME; }
 		if (defined('DBUSER')) { $this->db_user = DBUSER; }
 		if (defined('DBPASS')) { $this->db_pass = DBPASS; }
 
-		if (!$this->check_status()) 
-		{
-			if (!$this->config_already_setup)
-			{
-				if (!$this->setup_config())
-				{
+		if (!$this->check_status()) {
+			if (!$this->config_already_setup) {
+				if (!$this->setup_config()) {
 					$this->errors[] = "Error: setup_config()";
 				}
 			} 
-			if (!$this->database_already_setup)
-			{
-				if(!$this->setup_db())
-				{
+			if (!$this->database_already_setup) {
+				if(!$this->setup_db()) {
 					$this->errors[] = "Error: database_config()";
 				}
 			}
-			if (!$this->user_already_setup)
-			{
-				if (!$this->setup_user())
-				{
+			if (!$this->user_already_setup) {
+				if (!$this->setup_user()) {
 					$this->errors[] = "Error: user_config()";
 				}
 			}
-		}
-		else
-		{
+		} else {
 			echo "<h1>Nothing to do</h1>";
 			echo "<p>We double checked for you! The config file has already been written, the database has been populated, and you have created an administrator account.</p>";
 			exit();
 		}
 		
-		if (isset($this->errors))
-		{
-			foreach ($this->errors as $error)
-			{
+		if (isset($this->errors)) {
+			foreach ($this->errors as $error) {
 				echo $error . "<br />";
 			}
 		}
@@ -83,14 +69,10 @@ class install
 		echo "<p>To <a href='" . RAPID_DIR . "'>login</a> to RapidCMS go to <a href='" . RAPID_DIR . "'>http://" . $_SERVER['HTTP_HOST'] . RAPID_DIR . "</a>.";
 	}
 	
-	public function check_status()
-	{
-		if (strlen(trim($this->db_host)) > 1)
-		{
+	public function check_status() {
+		if (strlen(trim($this->db_host)) > 1) {
 			$this->config_already_setup = true;
-		}
-		else
-		{
+		} else {
 			$this->config_already_setup = false;
 			$this->database_already_setup = false;
 			$this->user_already_setup = false;
@@ -98,77 +80,76 @@ class install
 		}
 		
 		// since the config is already setup, check to see if db setup was completed
-		if ($db = new mysqli($this->db_host, $this->db_user, $this->db_pass, $this->db_name))
-		{
+		if ($db = new mysqli($this->db_host, $this->db_user, $this->db_pass, $this->db_name)) {
 			// echo "Configuration files are setup correctly.<br />";
 		}
-		if ($result = $db->query("SELECT * FROM blocks"))
-		{
+		/*
+		$result1 = $db->query("SELECT * FROM blocks");
+		$result2 = $db->query("SELECT * FROM users");
+		$result3 = $db->query("SELECT * FROM roles");
+		*/
+		
+		if ($result = $db->query("SELECT * FROM blocks")) {
 			// echo "Database is setup.<br />";
 			$this->database_already_setup = true;
-		}
-		else
-		{
+		} else {
 			$this->database_already_setup = false;
 			$this->user_already_setup = false;
 			return false;
 		}
 		
 		$result = $db->query("SELECT * FROM users WHERE role='administrator'");
-		if ($result->num_rows > 0) 
-		{
+		if ($result->num_rows > 0) {
 			$this->user_already_setup = true;
-		}
-		else
-		{
+		} else {
 			$this->user_already_setup = false;
 		}
 		
-		if ($this->config_already_setup && $this->database_already_setup && $this->user_already_setup)
-		{
+		if ($this->config_already_setup && $this->database_already_setup && $this->user_already_setup) {
 			return true;
-		}
-		else
-		{
+		} else {
 			return false;
 		}
 	}
 	
-	public function setup_db() 
-	{
-		if ($db = new mysqli($this->db_host, $this->db_user, $this->db_pass, $this->db_name))
-		{
+	public function setup_db() {
+		if ($db = new mysqli($this->db_host, $this->db_user, $this->db_pass, $this->db_name)) {
 			// $result = $db->query("DROP TABLE IF EXISTS blocks;");
 
-			if (!$result = $db->query("CREATE TABLE IF NOT EXISTS `blocks` (`id` int(11) NOT NULL AUTO_INCREMENT, `name` varchar(80) COLLATE utf8_unicode_ci NOT NULL, `content` longtext COLLATE utf8_unicode_ci, PRIMARY KEY (`id`));"))
-			{
+			if (!$result = $db->query("CREATE TABLE IF NOT EXISTS `blocks` (`id` int(11) NOT NULL AUTO_INCREMENT, `name` varchar(80) COLLATE utf8_unicode_ci NOT NULL, `content` longtext COLLATE utf8_unicode_ci, PRIMARY KEY (`id`));")) {
 				echo $db->error;
 				return false;
 			}
 
 			// $result = $db->query("DROP TABLE IF EXISTS `users`;");
 
-			if (!$result = $db->query("CREATE TABLE IF NOT EXISTS `users` (`id` int(10) unsigned NOT NULL AUTO_INCREMENT, `name` varchar(45) COLLATE utf8_unicode_ci NOT NULL, `pass` varchar(45) COLLATE utf8_unicode_ci NOT NULL, `role` varchar(45) COLLATE utf8_unicode_ci NOT NULL, PRIMARY KEY (`id`));"))
-			{
+			if (!$result = $db->query("CREATE TABLE IF NOT EXISTS `users` (`id` int(10) unsigned NOT NULL AUTO_INCREMENT, `name` varchar(45) COLLATE utf8_unicode_ci NOT NULL, `pass` varchar(45) COLLATE utf8_unicode_ci NOT NULL, `role` varchar(45) COLLATE utf8_unicode_ci NOT NULL, PRIMARY KEY (`id`));")) {
 				echo $db->error;
 				return false;
 			}
-		}
-		else 
-		{
+		} else {
 			return false;
 		}
 	}
 	
-	public function setup_config()
+	private function uuid($prefix = '')
 	{
-		if ($_POST['action'] == "setup_config") 
-		{
+		$chars = md5(uniqid(mt_rand(), true));
+		$uuid  = substr($chars,0,8) . '-';
+		$uuid .= substr($chars,8,4) . '-';
+		$uuid .= substr($chars,12,4) . '-';
+		$uuid .= substr($chars,16,4) . '-';
+		$uuid .= substr($chars,20,12);
+		return $prefix . $uuid;
+	}
+	
+	public function setup_config() {
+		if ($_POST['action'] == "setup_config") {
 			// $directory = dirname($_SERVER['DOCUMENT_ROOT'] . $_SERVER['SCRIPT_NAME']);
-			if ($f = fopen("includes/config.php", "wb"))
-			{
+			if ($f = fopen("includes/config.php", "wb")) {
 				$config  = "<?php\n";
 				$config .= "define('RAPID_DIR', '" . dirname($_SERVER['SCRIPT_NAME']) ."');\n";
+				$config .= "define('RAPID_UUID', '" . $this->uuid() . "');\n";
 				$config .= "define('RAPID_JS', 'true');\n";
 				$config .= "define('DBHOST', '" . $_POST['txt_DBHOST'] . "');\n";
 				$config .= "define('DBNAME', '" . $_POST['txt_DBNAME'] . "');\n";
@@ -182,21 +163,16 @@ class install
 				$this->db_user = $_POST['txt_DBUSER'];
 				$this->db_pass = $_POST['txt_DBPASS'];
 				return true;
-			}
-			else 
-			{
+			} else {
 				return false;
 			}
-		}
-		else 
-		{
+		} else {
 			$this->show_config_form();
 			exit();
 		}
 	}
 	
-	public function setup_user()
-	{
+	public function setup_user() {
 		if ($_POST['action'] == "setup_user") 
 		{
 			if ($db = new mysqli($this->db_host, $this->db_user, $this->db_pass, $this->db_name))
@@ -222,8 +198,7 @@ class install
 		}
 	}
 	
-	public function show_config_form()
-	{
+	public function show_config_form() {
 		?>
 		<h1>Setup Database</h1>
 		<p>RapidCMS uses the free mysql database to store information such as content and users. Please enter the host, database name, username, and password of the database you wish to use with RapidCMS.</p>
@@ -258,8 +233,7 @@ class install
 		<?php
 	}
 	
-	public function show_user_form()
-	{
+	public function show_user_form() {
 		?>
 		<h1>Setup Administrator</h1>
 		<p>Now we will setup the administrator account. You will need to login to make changes to blocks of content.</p>

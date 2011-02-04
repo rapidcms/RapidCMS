@@ -140,5 +140,13 @@ class user
 			return false;
 		}
 	}
+	
+	public function logged_in() {
+		if ($_SESSION['rapid_uid'] <> 0) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 }
 ?>

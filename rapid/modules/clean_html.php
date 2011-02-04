@@ -5,8 +5,8 @@ function clean_html ($html)
 	$c = str_replace("&Acirc;", "", $c);
 	$c = str_replace("&lt;","<", $c);
 	$c = str_replace("&gt;",">", $c);
-	// $c = str_replace("&quot;",'"', $c);
-	// $c = str_replace("&amp;",'&', $c);
+	$c = str_replace("<?php", "&lt;?php", $c);
+	$c = str_replace("?>", "?&gt;", $c);
 	
 	// Make HTML better in safari & chrome
 	$c = str_replace("<b>", "<strong>", $c);

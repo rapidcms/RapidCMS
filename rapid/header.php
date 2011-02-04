@@ -1,4 +1,4 @@
-<?php include("rapid.php"); ?>
+<?php include_once("rapid.php"); ?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
         "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -12,19 +12,21 @@
 <body>
 	<div id="wrapper">
 	<h1 class="rapidlogo">&equiv;RapidCMS</h1>
-	<h2 class="rapidlogo">Fast, simple, powerful.</h2>
+	<h2 class="rapidlogo">Free and simple CMS.</h2>
+	<!--
 	<ul class="menu">
 		<li><a href="<?php echo RAPID_DIR; ?>">Admin Home</a></li>
 		<li class="last">
 		<?php
-			if (isset($_SESSION['uid']))
-			{
+			if (isset($_SESSION['rapid_uid']) && $_SESSION['rapid_uuid'] == RAPID_UUID) {
 				echo "<a href='?action=logout'>Logout</a></li>";
-			}
-			else
-			{
+			} else {
 				echo "<a href='" . RAPID_DIR . "'>Login</a></li>";
 			}
-		
 		?>
 	</ul>
+	-->
+	<?php 
+		global $cms;
+		$cms->hooks->add_action('admin_header');
+	?>
