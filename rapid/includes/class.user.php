@@ -142,7 +142,7 @@ class user
 	}
 	
 	public function logged_in() {
-		if ($_SESSION['rapid_uid'] <> 0) {
+		if ($_SESSION['rapid_uid'] <> 0 && $_SESSION['rapid_uuid'] == RAPID_UUID) {
 			return true;
 		} else {
 			return false;

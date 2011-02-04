@@ -23,6 +23,7 @@
 	$(document).ready(function () {
 		var editor;
 		var editing = false;
+		var backup_content;
 		
 		$('body').css({
 			'height': $(document).height()
@@ -146,7 +147,6 @@
 					editing = $(this).attr('id');
 					var name = String(editing).substring(6);
 					var that = this;
-					
 					$.ajax({
 						url: "<?php echo RAPID_DIR; ?>/ajax.php",
 						type: "POST",
@@ -156,6 +156,7 @@
 						},
 						success: function (msg) {
 							editor.instanceById(editing).setContent(msg);
+							backup_content = msg;
 							$(that).css({'opacity': '1.0'});
 						}
 					});
@@ -202,6 +203,14 @@
 		
 		$('.nicEdit-pane :submit').live("click", function() {
 			editor.selectedInstance.elm.focus();
+		});
+		
+		editor.addEvent('key', function (instance, e) {
+			if (e.keyCode === 27) {
+				instance.setContent(backup_content);
+				instance.blur();
+				$('body').trigger('focus');
+			}
 		});
 	});
 </script>

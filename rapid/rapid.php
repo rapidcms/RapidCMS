@@ -144,12 +144,6 @@
 		}
 		include("js/init.php");
 		$cms->hooks->add_action('head');
-		/*
-		echo "<pre>";
-		var_dump($hooks);
-		var_dump($cms);
-		echo "</pre>";
-		*/
 	}
 
 	function logged_in () {
