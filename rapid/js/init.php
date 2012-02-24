@@ -11,7 +11,7 @@
 		}
 	}
 
-	enqueue_script("jquery-1.4.4.min.js", "slow");
+	enqueue_script("jquery-1.7.1.min.js", "slow");
 	enqueue_script("nicEdit.min.js", "slow");
 	enqueue_script("nicEdit.extend.js", "slow");
 ?>

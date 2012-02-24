@@ -1,10 +1,21 @@
-		<?php 
-		global $cms;
-		$cms->hooks->add_action('admin_footer'); 
-		?>
-		<div id="footer">
+		</section>
+		
+		<aside id="admin-sidebar" class="g320">
+			<?php 
+			global $hooks;
+			
+			$hooks->add_action('admin_sidebar');
+			?>
+		</aside>
+
+		<footer>
+			<?php 
+			global $hooks;
+		
+			$hooks->add_action('admin_footer'); 
+			?>
 			<p>Powered by: <a href="http://rapidcms.org">RapidCMS</a></p>
-		</div>
+		</footer>
 	<div>
 </body>
 </html>

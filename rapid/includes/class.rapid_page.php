@@ -1,10 +1,4 @@
 <?php
-
-function logout_add_css ($show) {
-	$added =  '#rapid_logout {	position: fixed;right: 15px;top: 5px}#rapid_logout li {display: inline;margin: 0;margin-right: 10px;border: 0}';
-	return $show . $added;
-}
-
 function logout_button() {
 	global $cms;
 	
@@ -14,10 +8,26 @@ function logout_button() {
 	$html .= "</ul>";
 	
 	if ($cms->user->logged_in()) {
-		echo "$html";
+	echo "$html";
+	?>
+	<script>
+		$(document).ready(function () {
+			$('#rapid_logout').css({
+				'position':'fixed',
+				'right': '15px',
+				'top': '5px'
+			});
+			
+			$('#rapid_logout li').css({
+				'display': 'inline',
+				'margin': '0',
+				'margin-right': '10px',
+				'border': '0'
+			});
+		});
+	</script>
+	<?php	
 	}
 }
-
 hooks::do_action("head", "logout_button");
-hooks::apply_filter("add_css", "logout_add_css", 1);
 ?>

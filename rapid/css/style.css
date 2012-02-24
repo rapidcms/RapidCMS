@@ -1,0 +1,195 @@
+/**
+ * Customized CSS Reset
+ *
+ * We have included a few classes:
+ * 1. .responsive - dynamically resizing images or embed
+ * 2. .clickable - change cursor to pointer
+ * 3. .clearfix - built in clearfix, no need for extra elements.
+ *
+ * We included a customized lite version of the golden grid system that tries
+ * to degrade gracefully when viewed on small screens.
+ *
+ * We set the width to 100% and set a max width so our design is fluid by
+ * default, use the .responsive class to make images scale with the width
+ */
+
+@font-face {
+  font-family: 'Romeral Inline';
+  src: url('fonts/romeral_inline-webfont.eot');
+  src: local('☺'),
+         url('fonts/romeral_inline-webfont.woff') format('woff'), url('romeral_inline-webfont.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Romeral';
+  src: url('fonts/romeral-webfont.eot');
+  src: local('☺'),
+         url('fonts/romeral-webfont.woff') format('woff'), url('romeral-webfont.ttf') format('truetype');
+}
+
+html,body,body div,span,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,abbr,address,cite,code,del,dfn,em,img,ins,kbd,q,samp,small,strong,sub,sup,var,b,i,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td,article,aside,figure,footer,header,hgroup,menu,nav,section,time,mark,audio,video{border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent;margin:0;padding:0;color: #444;font-family:georgia,serif}article,aside,figure,footer,header,hgroup,nav,section{display:block}html{overflow-y:scroll}ol{list-style:decimal inside none}ul{list-style:disc inside none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:none}a{font-size:100%;vertical-align:baseline;background:transparent;margin:0;padding:0}del{text-decoration:line-through}abbr[title],dfn[title]{border-bottom:1px dotted #000;cursor:help}table{border-collapse:collapse;border-spacing:0;font-size:inherit;font:100%}th{font-weight:700;vertical-align:bottom}td{font-weight:400;vertical-align:top}hr{display:block;height:1px;border:0;border-top:1px solid #ccc;margin:1em 0;padding:0}input,select{vertical-align:middle}pre{white-space:pre-line;word-wrap:break-word}input[type=checkbox]{vertical-align:baseline}select,input,textarea{font:99% serif}a:hover,a:active{outline:none}small{font-size:85%}strong,th{font-weight:700}td,td img{vertical-align:top}sub,sup{font-size:75%;line-height:0;position:relative}sup{top:-.5em}sub{bottom:-.25em}pre,code,kbd,samp{font-family:monospace, sans-serif;line-height:140%}button,input,select,textarea{margin:0}button{width:auto;overflow:visible}.clickable,label,input[type=button],input[type=submit],button{cursor:pointer}.ie7 img{-ms-interpolation-mode:bicubic}.ie6 html{filter:expression(document.execCommand("BackgroundImageCache",false,true))}.clearfix:before,.clearfix:after{content:"\0020";display:block;height:0;overflow:hidden}.clearfix:after{clear:both}.clearfix{zoom:1}.responsive{max-width:100%}input[type=radio],.ie6 input{vertical-align:text-bottom}
+
+/* Custom text-selection colors ------>#??????*/
+::-moz-selection{color:#fff;background:#fcd700;text-shadow:none;}
+::selection {    color:#fff;background:#fcd700;text-shadow:none;}
+ins {     color:#000; background-color:#fcd700;}
+mark {    color:#000; background-color:#fcd700;font-style:italic;font-weight:bold;}
+a:link {   -webkit-tap-highlight-color:#fcd700;}
+
+/* Default styles optimized for legibility 100pe2r */
+html{background: #fff;}
+h1, h2, h3 {line-height:48px;margin:12px 0;}
+h1 {font-size:36px;}
+h2 {font-size:24px;}
+h3 {font-size:21px;}
+p, ul, ol, blockquote, pre, td, th, caption {font-size: 16px;line-height:24px;margin:12px 0}
+blockquote{color:#888}
+blockquote {
+  background: url(../images/quote-end.png) no-repeat right bottom;
+  padding-left: 4px;
+  padding-bottom: 12px;
+  padding-top: 23px;
+}
+blockquote:first-letter {
+  background: url(../images/quote-start.png) no-repeat left top;
+  padding-left: 35px;
+  padding-top: 20px;
+}
+a {color: #03f;}
+a:hover {color: #69f;}
+
+dl {width:100%;overflow:hidden;}
+dt {float:left;width:50%;}
+dd {float:left;width:50%;}
+
+td { padding: 0px 12px;}
+
+/* Grid System */
+body.horzGrid{background: url('../images/horzGrid.png') repeat}
+body.vertGrid .wrapper {background: url('../images/vertGrid.png') repeat-y}
+
+.g160,.g320,.g480,.g640,.g800,.g960,.g80,.g240,.g400,.g560,.g720,.g880,.g960{float:left;display:inline;margin-left:10px;}
+
+.g160{width:150px;}
+.g320{width:310px;}
+.g480{width:470px;}
+.g640{width:630px;}
+.g800{width:790px;}
+.g960{width:950px;}
+
+.g80 {width:70px;}
+.g240{width:230px;}
+.g400{width:390px;}
+.g560{width:550px;}
+.g720{width:710px;}
+.g880{width:870px;}
+
+.ml80 {margin-left:90px;}
+.ml160{margin-left:170px;}
+.ml240{margin-left:250px;}
+.ml320{margin-left:330px;}
+.ml400{margin-left:410px;}
+.ml480{margin-left:490px;}
+.ml560{margin-left:560px;}
+.ml640{margin-left:650px;}
+.ml720{margin-left:730px;}
+.ml800{margin-left:810px;}
+.ml880{margin-left:890px;}
+.ml960{margin-left:970px;}
+
+/* NAVIGATION */
+.horzNav li {
+	display: inline-block;
+	float: left;
+	min-width: 100px;
+	padding: 10px;
+}
+.horzNav ul ul {
+	display: none;
+	position: absolute;
+	background: #fff;
+}
+.horzNav li:hover > ul {
+	display: block;
+	border: 1px solid #000;
+	clear: both;
+}
+.horzNav li > ul li {
+	display: block;
+	border-bottom: 1px solid #000;
+	float: none;
+}
+.horzNav li > ul li a, nav li > ul li a:hover, nav li > ul li a:visited {
+	color: #444;
+}
+
+.wrapper {
+	margin: 0 auto;
+	max-width: 970px;
+	min-width: 390px;
+	padding: 0 32px;
+}
+
+footer {
+	clear: both;
+}
+
+/* Classes */
+h1.rapidlogo { 
+	color: #222; 
+	line-height: 1; 
+	margin: 10px 0 0 -15px; 
+	font-size: 46px; 
+	font-family: 'Romeral Inline', Georgia;
+	font-weight: normal;
+	font-style: italic;
+}
+
+h2.rapidlogo { 
+	color: #222;
+	line-height: 1;
+	margin: 0px 0px 30px 10px;
+	padding: 0px;
+	font-family: Georgia;
+}
+
+.block {
+	border: 1px solid #444;
+}
+
+ul.menu { float: right; margin-top: -100px; }
+ul.menu li {margin: 0; display: inline; padding: 0px 8px 0px 3px; border-right: 1px solid #000;}
+ul.menu li.last { border-right: 0px; }
+ul.menu a, ul.menu a:active, ul.menu a:visited, ul.menu a:hover { text-decoration: none;}
+ul.menu a:hover { text-decoration: underline; }
+
+/* Media queries!
+-------------------------------------------------------------------------------*/
+
+/* Portrait */
+@media screen and (max-width: 480px) {
+	.wrapper {
+		width: 390px;
+		margin: 0 45px;
+		padding: 0;
+	}
+
+	/* Adjust gridsystem for small res */
+	.g560,.g640,.g720,.g800,.g880,.g960 {width: 390px;}
+	.ml320,.ml400,.ml480,.ml560,.ml640,.ml720,.ml800,.ml880,.ml960, {margin-left:0px;}
+}
+
+/* Landscape */
+@media screen and (min-width : 481px) and (max-width: 800px) {
+	.wrapper {
+		max-width: 800px;
+		margin: 0 35px;
+		padding: 0;
+	}
+
+	/* Adjust gridsystem for small res */
+	.g800,.g880,.g960 {max-width: 730px;}
+	.ml560,.ml640,.ml720,.ml800,.ml880,.ml960, {margin-left:0px;}
+}
+
+
+@media print {*{background:transparent!important;color:#000!important;text-shadow:none!important;filter:none!important;-ms-filter:none!important}a,a:visited{color:#444!important;text-decoration:underline}a[href]:after{content:" (" attr(href) ")"}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^=javascript:]:after,a[href^=#]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100%!important}@page{margin:.5cm}p,h2,h3{orphans:3;widows:3}h2,h3{page-break-after:avoid}.wrapper{width:90%;}}

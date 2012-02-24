@@ -1,6 +1,6 @@
 <?php
 // add this later <meta name="generator" content="WordPress">
-session_start();
+
 require_once("rapid.php");	
 
 // if the config.php files hasn't been setup then go to the install page
@@ -15,33 +15,34 @@ if ($_GET['action'] == "logout") {
 }
 
 // if we are not logged in.
-if (!isset($_SESSION['rapid_uid']))
-{
-	// if we havn't sent the login form?
-	if (!isset($_POST['txt_username']))
-	{
+if (!isset($_SESSION['rapid_uid'])) {
+	
+	// if we hav not sent the login form?
+	if (!isset($_POST['txt_username'])) {
 		show_login_page();
 		exit();
-	}
-	else
-	{
-		//include_once("includes/class.user.php");
-		//$u = new user();
-		//global $user;
+	} else {
 		$cms->user->username = $_POST['txt_username'];
 		$cms->user->unencrypted_password = $_POST['pwd_password'];
 		$cms->user->authenticate();
-		if ($cms->user->error <> "")
-		{
+		
+		if ($cms->user->error <> "") {
 			include("header.php");
+
 			$cms->hooks->add_action('admin_login_error_header');
+			
 			echo "<h1>Oops. Try again.</h1>";
+			
 			foreach ($cms->user->error as $error) {
 				echo "<p>$error</p>";
 			}
+			
 			echo "<a href=\"./\">Give it another try</a>";
+			
 			$cms->hooks->add_action('admin_login_error_footer');
+			
 			include("footer.php");
+			
 			exit();
 		}
 		
@@ -50,24 +51,26 @@ if (!isset($_SESSION['rapid_uid']))
 		header('Location: #');
 		$cms->hooks->add_action('admin_login');
 	}
-}
-else 
-{
+} else  {
 	if ($_SESSION['rapid_uuid'] <> RAPID_UUID) {
 		echo "Invalid UUID<br />";
 		echo "<a href='?action=logout'>Logout and try again.</a>";
+		
 		exit();
 	}
-	if (!isset($_GET['action']))
-	{
+
+	if (!isset($_GET['action'])) {
 		include("header.php");
+
 		echo "<h2>Blocks</h2>";
+		
 		// TODO: change this to the $cms->load_all() method once it's finished
 		$db = new mysqli(DBHOST, DBUSER, DBPASS, DBNAME);
 		$result = $db->query("SELECT * FROM blocks");
+		
 		?>
 		<p>Click on the name of the block you wish to edit.</p>
-		<?php  ?>
+		
 		<table>
 			<tr>
 				<th>Block</th>
@@ -75,9 +78,9 @@ else
 				<th>Delete</th>
 			</tr>
 		<?php
+		
 		// TODO: change this to foreach($cms->blocks as $block) when method is finished.
-		while ($row = $result->fetch_object())
-		{
+		while ($row = $result->fetch_object()) {
 			echo "<tr>";
 			echo "<td>" . $row->name . "</td>";
 			echo "<td><a href=\"?name=" . $row->name . "&action=edit_block\">Edit</a></td>";
@@ -85,15 +88,17 @@ else
 			
 			echo "</tr>";
 		}
+		
 		?>
 		</table>
 		<p>[ <a href='?action=add_block'>Add New</a> ]</p>
+		
 		<?php
-		//include_once("includes/class.user.php");
-		//$cms->u = new user();
 		global $cms;
+
 		$cms->user->id = $_SESSION['uid'];
 		$cms->user->load();
+		
 		if ($cms->user->role == "administrator") {
 			echo "<h2>Users</h2>";
 			$db = new mysqli(DBHOST, DBUSER, DBPASS, DBNAME);
@@ -105,8 +110,8 @@ else
 			echo "<th>Edit</th>";
 			echo "<th>Delete</th>";
 			echo "</tr>";
-			while ($row = $result->fetch_object())
-			{
+			
+			while ($row = $result->fetch_object()) {
 				echo "<tr>";
 				echo "<td>" . $row->id . "</td>";
 				echo "<td>" . $row->name . "</td>";
@@ -115,50 +120,59 @@ else
 				echo "<td><a href='?name=" . $row->name . "&action=delete_user'>Delete</a></td>";
 				echo "</tr>";
 			}
+
 			echo "</table>";
 			echo "<p>[ <a href='?action=add_user'>Add New</a> ]</p>";
 		}
+
 		include("footer.php");
-	}
-	else
-	{
-		switch ($_GET['action'])
-		{
+	} else {
+		switch ($_GET['action']) {
 			case 'edit_block':
 				include("header.php");
-				echo "<h1>Edit Block</h1>";
+				
 				?>
+				<h1>Edit Block</h1>
+
 				<fieldset>
 					<legend>Block Name: <?php echo $_GET['name'] ?></legend>
 					<?php $cms->content($_GET['name']); ?>
 				</fieldset>
 					
 				<h3>Instructions</h3>
+
 				<p>Click the edit button to turn on editing mode. With editing mode on, you can click the content block to start editing. You might notice that it doesn't match the styles of your site. To edit the content with instant preview of the styles, you have to edit this block on that page.
+				
 				<?php		
 				include("footer.php");
 				break;
 			case 'delete_block':
 				include("header.php");
+				
 				?>
 				<h1>Delete Block?</h1>
+				
 				<p>Are you sure you want to delete the block named "<?php echo $_GET['name']; ?>"</p>
+				
 				<p>
 					<a href="?name=<?php echo $_GET['name']; ?>&action=block_deleted">Yes, delete the block.</a> |
 					<a href="<?php echo RAPID_DIR; ?>">No, take me back!</a>
 				</p>
+				
 				<?php			
 				include("footer.php");
 				break;
-				
 			case 'block_deleted':
 				include("header.php");
+				
 				$cms->load($_GET['name']);
 				$cms->blocks[$_GET['name']]->delete();
 				?>
+				
 				<h1>Block Deleted</h1>
 				<p>The block has been successfully deleted.</p>
 				<p><a href="<?php echo RAPID_DIR; ?>">Return to the Main Page</a><p>
+				
 				<?php			
 				include("footer.php");
 				break;
@@ -166,6 +180,7 @@ else
 			case 'add_block':
 				include("header.php");
 				?>
+				
 				<h1>Add New Block</h1>
 				<p>Please enter a name for your block.</p>
 				<form method="get" action="<?php echo $_SERVER['PHP_SELF']; ?>">
@@ -181,22 +196,27 @@ else
 						</li>
 					</ul>
 				</form>
+				
 				<?php
 				include("footer.php");
 				break;
 			case 'block_added':
 				include("header.php");
+				
 				$cms->content($_GET['name']);
 				?>
+				
 				<h1>Block Added</h1>
 				<p>Your block has been added successfully.</p>
 				<p><a href="<?php echo RAPID_DIR; ?>">Return to the Main Page</a><p>
+				
 				<?php			
 				include("footer.php");
 				break;
 			case 'add_user':
 				include("header.php");
 				?>
+				
 				<h1>Add New User</h1>
 				<p>Please enter the user information.</p>
 				<form method="get" action="<?php echo $_SERVER['PHP_SELF']; ?>">
@@ -227,47 +247,57 @@ else
 						</li>
 					</ul>
 				</form>
+				
 				<?php			
 				include("footer.php");
 				break;
 			case 'user_added':
 				include_once("includes/class.user.php");
+				
 				$u = new user;
 				$u->username = $_GET['username'];
 				$u->unencrypted_password = $_GET['password'];
 				$u->role = $_GET['role'];
+				
 				if ($u->save()) {
 					include("header.php");
 					?>
+					
 					<h1>User Added</h1>
 					<p>The user has been added successfully.</p>
 					<p><a href="<?php echo RAPID_DIR; ?>">Return to the Main Page</a><p>
+					
 					<?php			
 					include("footer.php");
-				}
-				else
-				{
+				} else {
 					include("header.php");
 					?>
+
 					<h1>Error adding users</h1>
 					<p>The user hasn't been added, there was an error.</p>
+					
 					<?php
 						foreach ($u->error as $error) {
 							echo "<p>" . $error . "</p>";
 						}
 					?>
+					
 					<p><a href="<?php echo RAPID_DIR; ?>">Return to the Main Page</a><p>
+					
 					<?php
 					include("footer.php");
 				}
 				break;
 			case 'edit_user':
 				include_once("includes/class.user.php");
+				
 				$u = new user();
 				$u->username = $_GET['name'];
 				$u->load(true);
+				
 				include("header.php");
 				?>
+
 				<h1>Edit User</h1>
 				<p>Please update the user information.</p>
 				<form method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>?action=user_edited">
@@ -297,11 +327,13 @@ else
 						</li>
 					</ul>
 				</form>
+				
 				<?php
 				include("footer.php");
 				break;
 			case 'user_edited':
 				include_once("includes/class.user.php");
+				
 				$u = new user();
 				$u->username = $_POST['name'];
 				$u->load(true);
@@ -312,28 +344,32 @@ else
 				print_r($_POST);
 				print_r($u);
 				echo "</pre>";
-				if ($u->save())
-				{
+
+				if ($u->save()) {
 					include("header.php");
 					?>
+					
 					<h1>User Updated</h1>
 					<p>The user has been updated successfully.</p>
 					<p><a href="<?php echo RAPID_DIR; ?>">Return to the Main Page</a><p>
+					
 					<?php
 					include("footer.php");
-				}
-				else 
-				{
+				} else {
 					include("header.php");
 					?>
+
 					<h1>Error updating user</h1>
 					<p>The user hasn't been updated, there was an error.</p>
+					
 					<?php
-						foreach ($u->error as $error) {
-							echo "<p>" . $error . "</p>";
-						}
+					foreach ($u->error as $error) {
+						echo "<p>" . $error . "</p>";
+					}
 					?>
+					
 					<p><a href="<?php echo RAPID_DIR; ?>">Return to the Main Page</a><p>
+					
 					<?php
 					include("footer.php");
 				}
@@ -341,40 +377,48 @@ else
 			case 'delete_user':
 				include("header.php");
 				?>
+
 				<h1>Delete User?</h1>
 				<p>Are you sure you want to delete the user named "<?php echo $_GET['name']; ?>"</p>
 				<p>
 					<a href="?name=<?php echo $_GET['name']; ?>&action=user_deleted">Yes, delete this user.</a> |
 					<a href="<?php echo RAPID_DIR; ?>">No, take me back!</a>
 				</p>
+				
 				<?php
 				include("footer.php");
 				break;
 			case 'user_deleted':
 				include_once("includes/class.user.php");
+				
 				$u = new user();
 				$u->username = $_GET['name'];
+				
 				if ($u->delete()) {
 					include("header.php");
 					?>
+					
 					<h1>User Deleted</h1>
 					<p>The user has been deleted successfully.</p>
 					<p><a href="<?php echo RAPID_DIR; ?>">Return to the Main Page</a><p>
+					
 					<?php
 					include("footer.php");
-				}
-				else
-				{
+				} else {
 					include("header.php");
 					?>
+
 					<h1>Error deleting users</h1>
 					<p>The user hasn't been deleted, there was an error.</p>
+					
 					<?php
-						foreach ($u->error as $error) {
-							echo "<p>" . $error . "</p>";
-						}
+					foreach ($u->error as $error) {
+						echo "<p>" . $error . "</p>";
+					}
 					?>
+			
 					<p><a href="<?php echo RAPID_DIR; ?>">Return to the Main Page</a><p>
+			
 					<?php
 					include("footer.php");
 				}
@@ -384,11 +428,13 @@ else
 		}
 	}
 }
-function show_login_page()
-{
+
+function show_login_page() {
 	include("header.php");
+
 	$cms->hooks->add_action('admin_login_form');
 	?>
+	
 	<div>
 		<h1>RapidCMS Login</h1>
 		<p>To enable editing of pages, you must be logged into the system. Please enter your username and password below to continue.</p>
@@ -411,6 +457,7 @@ function show_login_page()
 			</fieldset>
 		</form>
 	</div>
+	
 	<?php
 	include("footer.php");
 }
