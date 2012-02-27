@@ -18,13 +18,13 @@
 			$this->db = new mysqli(DBHOST, DBUSER, DBPASS, DBNAME);
 		}
 		
-		public function show() {
+		public function show($tag='div') {
 			GLOBAL $cms;
 			GLOBAL $hooks;
 
-			$show  = "<div class=\"block\" id=\"block_" . $this->name . "\">\n\t";
+			$show  = "<" . $tag . " class=\"block\" id=\"block_" . $this->name . "\">\n\t";
 			$show .= $this->content;
-			$show .= "</div>\n";
+			$show .= "</" . $tag . ">\n";
 			echo $hooks->add_filter('show_content', $show);
 		}
 		

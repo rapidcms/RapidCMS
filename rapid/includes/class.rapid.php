@@ -12,9 +12,9 @@
 			$this->user = new user;
 		}
 		
-		public function content($name) {
+		public function content($name, $tag='div') {
 			$this->load($name);
-			$this->blocks[$name]->show();
+			$this->blocks[$name]->show($tag);
 		}
 		
 		public function load($name) {
