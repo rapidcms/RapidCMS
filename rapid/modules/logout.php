@@ -7,11 +7,13 @@ function logout_add_css ($show) {
 
 function logout_button() {
 	global $cms;
-	
-	$html  = "<ul id='rapid_logout'>";
+	$html  = "<script>jQuery(function ($) {";
+	$html .= "$('body').append(\"";
+	$html .= "<ul id='rapid_logout'>";
 	$html .= "<li><a href='". RAPID_DIR . "'>Admin Section</a></li>";
 	$html .= "<li><a href='". RAPID_DIR . "?action=logout' class='last'>Logout</a></li>";
 	$html .= "</ul>";
+	$html .= "\");});</script>";
 	
 	if ($cms->user->logged_in()) {
 		echo "$html";
