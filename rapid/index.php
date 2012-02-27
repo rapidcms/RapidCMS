@@ -1,5 +1,6 @@
 <?php
 // add this later <meta name="generator" content="WordPress">
+session_start();
 
 require_once("rapid.php");	
 
@@ -17,7 +18,7 @@ if ($_GET['action'] == "logout") {
 // if we are not logged in.
 if (!isset($_SESSION['rapid_uid'])) {
 	
-	// if we hav not sent the login form?
+	// if we have not sent the login form?
 	if (!isset($_POST['txt_username'])) {
 		show_login_page();
 		exit();
@@ -53,8 +54,8 @@ if (!isset($_SESSION['rapid_uid'])) {
 	}
 } else  {
 	if ($_SESSION['rapid_uuid'] <> RAPID_UUID) {
-		echo "Invalid UUID<br />";
-		echo "<a href='?action=logout'>Logout and try again.</a>";
+		echo "<h1>Invalid UUID</h1>";
+		echo "<p><a href='?action=logout'>Logout and try again.</a></p>";
 		
 		exit();
 	}
@@ -82,10 +83,9 @@ if (!isset($_SESSION['rapid_uid'])) {
 		// TODO: change this to foreach($cms->blocks as $block) when method is finished.
 		while ($row = $result->fetch_object()) {
 			echo "<tr>";
-			echo "<td>" . $row->name . "</td>";
-			echo "<td><a href=\"?name=" . $row->name . "&action=edit_block\">Edit</a></td>";
-			echo "<td><a href=\"?name=" . $row->name . "&action=delete_block\">Delete</a></td>";
-			
+			echo "\t<td>" . $row->name . "</td>";
+			echo "\t<td><a href=\"?name=" . $row->name . "&action=edit_block\">Edit</a></td>";
+			echo "\t<td><a href=\"?name=" . $row->name . "&action=delete_block\">Delete</a></td>";
 			echo "</tr>";
 		}
 		
@@ -100,9 +100,10 @@ if (!isset($_SESSION['rapid_uid'])) {
 		$cms->user->load();
 		
 		if ($cms->user->role == "administrator") {
-			echo "<h2>Users</h2>";
 			$db = new mysqli(DBHOST, DBUSER, DBPASS, DBNAME);
 			$result = $db->query("SELECT * FROM users;");
+			
+			echo "<h2>Users</h2>";
 			echo "<table><tr>";
 			echo "<th>ID</th>";
 			echo "<th>Username</th>";
@@ -431,33 +432,32 @@ if (!isset($_SESSION['rapid_uid'])) {
 
 function show_login_page() {
 	include("header.php");
+	global $hooks;
 
-	$cms->hooks->add_action('admin_login_form');
+	$hooks->add_action('admin_login_form');
 	?>
-	
-	<div>
-		<h1>RapidCMS Login</h1>
-		<p>To enable editing of pages, you must be logged into the system. Please enter your username and password below to continue.</p>
-		<form method="post" action="<?php echo $_SERVER['PHP_SELF'];?>">
-			<fieldset>
-				<ul>
-					<li>
-						<label>Username: </label>
-						<input type="text" name="txt_username" />
-					</li>
-					<li>
-						<label>Password: </label>
-						<input type="password" name="pwd_password" />
-					</li>
-					<li>
-						<label>&nbsp;</label>
-						<input type="submit" />
-					</li>
-				</ul>
-			</fieldset>
-		</form>
-	</div>
-	
+
+	<h1>Login</h1>
+	<p>To enable editing of pages, you must be logged into the system. Please enter your username and password below to continue.</p>
+	<form method="post" action="<?php echo $_SERVER['PHP_SELF'];?>">
+		<fieldset>
+			<ul>
+				<li>
+					<label>Username: </label>
+					<input type="text" name="txt_username" />
+				</li>
+				<li>
+					<label>Password: </label>
+					<input type="password" name="pwd_password" />
+				</li>
+				<li>
+					<label>&nbsp;</label>
+					<input type="submit" />
+				</li>
+			</ul>
+		</fieldset>
+	</form>
+
 	<?php
 	include("footer.php");
 }

@@ -63,6 +63,19 @@ dd {float:left;width:50%;}
 
 td { padding: 0px 12px;}
 
+/*Forms*/
+form ul, form ol {
+	list-style: none;
+}
+form li {
+	line-height: 36px;
+}
+form label {
+	display: block;
+	float: left;
+	width: 85px;
+}
+
 /* Grid System */
 body.horzGrid{background: url('../images/horzGrid.png') repeat}
 body.vertGrid .wrapper {background: url('../images/vertGrid.png') repeat-y}

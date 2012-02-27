@@ -11,19 +11,21 @@
 		}
 	}
 
-	enqueue_script("jquery-1.7.1.min.js", "slow");
-	enqueue_script("nicEdit.min.js", "slow");
-	enqueue_script("nicEdit.extend.js", "slow");
+	enqueue_script("jquery-1.7.1.min.js", "fast");
+	enqueue_script("nicEdit.min.js", "fast");
+	enqueue_script("nicEdit.extend.js", "fast");
 ?>
 
 <?php if ($_SESSION['rapid_uid'] <> 0 && $_SESSION['rapid_uuid'] == RAPID_UUID) { ?>
 <script type="text/javascript" id="init.php">
-	/*global window document $ nicEditor*/
+	/*global window document jQuery nicEditor*/
 	
-	$(document).ready(function () {
+	jQuery(function ($) {
 		var editor;
-		var editing = false;
 		var backup_content;
+		var editing = false;
+		var edit_img = "<?php echo RAPID_DIR; ?>/images/edit_mode.png";
+		var edit_button = "<a id='rapid_edit'href='#'></a>";
 		
 		$('body').css({
 			'height': $(document).height()
@@ -34,9 +36,8 @@
 			iconsPath: '<?php echo RAPID_DIR;?>/js/nicEditorIcons.gif',
 			xhtml: true
 		});
-		var edit_img = "<?php echo RAPID_DIR; ?>/images/edit_mode.png";
-		var edit_button = "<a id='rapid_edit'href='#'></a>";
-		$('body').prepend(edit_button);
+		
+		$('body').append(edit_button);
 		
 		$('#rapid_edit').css({
 			'display': 'block',
@@ -52,13 +53,6 @@
 			'text-align' : 'center',
 			'text-decoration': 'none'
 		});
-		/*
-		$('#rapid_caption').css({
-			'margin': '0',
-			'padding': '5px 7px 7px 7px',
-			'line-height': '34px'
-		});
-		*/
 		
 		$('#rapid_edit').hover(function () {
 			$(this).css({'opacity': '0.75'});
@@ -67,39 +61,31 @@
 		});
 		
 		// Position the edit button
-		if ($.browser.msie) {
-			$('#rapid_edit').css({'position': 'absolute'});
+		$(window).resize(function () {
+			var edit_position = (window.innerHeight - $('#rapid_edit').height()) / 2;
+			$('#rapid_edit').css({'top': edit_position});
+		});
 			
-			$(window).resize(function () {
-				$('#rapid_edit').css({'top': (($(window).height() - $('#rapid_edit').height()) / 2) + $(window).scrollTop()});
-			});
-			
-			$(window).scroll(function () {
-				$(window).trigger("resize");
-			});
-			
-			$(window).trigger("resize");
-		} else {
-			$(window).resize(function () {
-				var edit_position = (window.innerHeight - $('#rapid_edit').height()) / 2;
-				$('#rapid_edit').css({'top': edit_position});
-			});
-			
-			$(window).trigger("resize");
-		}
+		$(window).trigger("resize");
 		
 		// this toggles edit mode on and off
 		$('#rapid_edit').toggle(function () {
 			edit_mode = true;
+			
 			$('#rapid_edit').css('background-position', '-46px 0px');
+			
 			editor.floatingPanel();
+			
 			$('.block').each(function () {
 				editor.addInstance($(this).attr('id'));
 			});
 		}, function () {
 			edit_mode = false;
+			
 			$('#rapid_edit').css('background-position','0 0');
+			
 			editor.floating.remove();
+			
 			$('.block').each(function () {
 				editor.removeInstance($(this).attr('id'));
 			});
@@ -111,19 +97,24 @@
 		// if we're in edit mode then, disable all the links.
 		$('a').click(function (e) {
 			if (edit_mode) {
-				// TODO: popup on lower left saying links are not active ...
+				/**
+				 * @TODO popup on lower left saying links are not active ...
+				 */ 
 				e.preventDefault();
 			}
 		});
 		
 		$('.block').hover(function () {
 			if (edit_mode && !editing) {
-				$(this).css({'opacity': '0.5'});
 				var position = $(this).offset();
+
+				$(this).css({'opacity': '0.5'});
 				$(this).focus();
+
 				$(editor.floating).css({
 					'width': $(this).outerWidth()
 				});
+
 				$(editor.floating).css({
 					'z-index': 999999999,
 					'top': position.top - $(editor.floating).height(),
@@ -171,12 +162,12 @@
 		$('.block').blur(function (e) {
 			if (editing) {
 				var is_pane = $('html').find('.nicEdit-pane').hasClass('nicEdit-pane');
+				
 				if (edit_mode) {
 					if (!is_pane) {
 						var name = String(editing).substring(6);
 						var content = editor.instanceById(editing).getContent();
 						
-
 						$('body').ajaxError(function () {
 							alert("There has been an error. Your content was not saved.");
 						});
@@ -205,6 +196,7 @@
 			editor.selectedInstance.elm.focus();
 		});
 		
+		/* Handler for 'esc' key. We treat it as a cancel */
 		editor.addEvent('key', function (instance, e) {
 			if (e.keyCode === 27) {
 				instance.setContent(backup_content);

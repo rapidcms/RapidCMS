@@ -24,6 +24,7 @@ function request_uri() {
 
 function admin_header_referer () {
 	global $cms;
+	
 	if (isset($_SESSION['referer']) && $cms->user->logged_in()) {
 		if ($_SESSION['referer'] <> "http://" . $_SERVER['HTTP_HOST'] . RAPID_DIR . "/index.php") {
 			?>

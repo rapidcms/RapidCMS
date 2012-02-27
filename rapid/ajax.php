@@ -1,6 +1,8 @@
 <?php
 session_start();
+
 include_once("rapid.php");
+
 global $cms;
 global $hooks;
 
