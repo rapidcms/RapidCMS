@@ -11,9 +11,9 @@
 		}
 	}
 
-	enqueue_script("jquery-1.7.1.min.js", "fast");
-	enqueue_script("nicEdit.min.js", "fast");
-	enqueue_script("nicEdit.extend.js", "fast");
+	enqueue_script("jquery-1.7.1.min.js");
+	enqueue_script("nicEdit.min.js");
+	enqueue_script("nicEdit.extend.js");
 ?>
 
 <?php if ($_SESSION['rapid_uid'] <> 0 && $_SESSION['rapid_uuid'] == RAPID_UUID) { ?>
