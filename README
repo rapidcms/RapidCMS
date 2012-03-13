@@ -1,31 +1,31 @@
 /*******************************************************************************
  * RapidCMS
- * Version: V.0.6
+ * Version: V.0.7
  * Author: Jaime A. Rodriguez
 ********************************************************************************
 
 Overview:
 
-RapidCMS was designed to be very simple to implement. First, create your site as 
+RapidCMS was designed to be very simple to implement. First, create your site as
 you would normally in html, css, and javascript. When the site is complete,
 install the framework. Specify what content is editable and replace those blocks,
 per the online instructions. Those blocks are now editable by clicking the 'EDIT'
 button that appears on the left when you are logged in.
 
 From the clients perspective, editing the site is very simple.  They log in and
-then surf the site.  When they reach the content they want to change, they click 
-the 'EDIT' button and edit the content just like they were editing with a word 
+then surf the site.  When they reach the content they want to change, they click
+the 'EDIT' button and edit the content just like they were editing with a word
 processor.
 
 The interface is extremely intuitive and easy to use.
 
-The cms may be lightweight and simple to use, but it has the ability to be 
-extended to do new do things. Integrated into the code are WordPress style hooks 
+The cms may be lightweight and simple to use, but it has the ability to be
+extended to do new do things. Integrated into the code are WordPress style hooks
 and actions. They allow you to create powerful modules to extend the functionality
 of RapidCMS.
 
 Licensing:
 
 RapidCMS is licensed under the GPL2 license, an extreamely popular and free license.
-If you need special licensing for your company or clients, you can request it by 
+If you need special licensing for your company or clients, you can request it by
 emailing jaime@rapidcms.org
