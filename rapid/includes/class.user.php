@@ -1,6 +1,7 @@
 <?php
-class user
-{
+require_once('config.php');
+
+class user {
 	private $db;
 
 	public $id;
@@ -24,9 +25,9 @@ class user
 	public function load($name=false) {
 
 		if ($name) {
-			$sql = "SELECT * FROM users where name='" . $this->sanitize($this->username) . "';";
+			$sql = "SELECT * FROM " . DBPREFIX . "users where name='" . $this->sanitize($this->username) . "';";
 		} else	{
-			$sql = "SELECT * FROM users where id='" . $this->sanitize($this->id) . "';";
+			$sql = "SELECT * FROM " . DBPREFIX . "users where id='" . $this->sanitize($this->id) . "';";
 		}
 
 		$result = $this->db->query($sql);		
@@ -57,7 +58,7 @@ class user
 			return false;
 		}
 
-		$result = $this->db->query("SELECT * FROM users where name='" . $this->sanitize($this->username) . "' AND pass='" . md5($this->sanitize($this->unencrypted_password)) . "';");
+		$result = $this->db->query("SELECT * FROM " . DBPREFIX . "users where name='" . $this->sanitize($this->username) . "' AND pass='" . md5($this->sanitize($this->unencrypted_password)) . "';");
 
 		if ($result->num_rows > 0) {	
 			$row = $result->fetch_object();
@@ -93,14 +94,14 @@ class user
 		}
 		
 		if (isset($this->id)) {
-			$sql  = "UPDATE users SET name='" . $this->sanitize($this->username) . "'";
+			$sql  = "UPDATE " . DBPREFIX . "users SET name='" . $this->sanitize($this->username) . "'";
 			if (strlen($this->unencrypted_password) > 0) {
 				$sql .= ", pass='" . md5($this->sanitize($this->unencrypted_password)) . "'";
 			}
 			$sql .= ", role='" . $this->role . "'";
 			$sql .= " WHERE id=" . $this->id . ";";
 		} else {
-			$sql = "INSERT INTO users SET name='" . $this->sanitize($this->username) . "', pass='" . md5($this->sanitize($this->unencrypted_password)) . "', role='" . $this->sanitize($this->role) . "';";
+			$sql = "INSERT INTO " . DBPREFIX . "users SET name='" . $this->sanitize($this->username) . "', pass='" . md5($this->sanitize($this->unencrypted_password)) . "', role='" . $this->sanitize($this->role) . "';";
 		}
 		
 		$result = $this->db->query($sql);
@@ -114,7 +115,7 @@ class user
 	}
 
 	public function delete() {
-		$sql = "DELETE FROM users WHERE name='" . $this->sanitize($this->username) . "';";
+		$sql = "DELETE FROM " . DBPREFIX . "users WHERE name='" . $this->sanitize($this->username) . "';";
 		$result = $this->db->query($sql);
 		if ($result) {
 			return true;
