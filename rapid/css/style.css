@@ -73,7 +73,8 @@ form li {
 form label {
 	display: block;
 	float: left;
-	width: 85px;
+	width: 140px;
+	padding-right: 10px;
 }
 
 /* Grid System */
@@ -147,17 +148,17 @@ footer {
 }
 
 /* Classes */
-h1.rapidlogo { 
-	color: #222; 
-	line-height: 1; 
-	margin: 10px 0 0 -15px; 
-	font-size: 46px; 
+h1.rapidlogo {
+	color: #222;
+	line-height: 1;
+	margin: 10px 0 0 -15px;
+	font-size: 46px;
 	font-family: 'Romeral Inline', Georgia;
 	font-weight: normal;
 	font-style: italic;
 }
 
-h2.rapidlogo { 
+h2.rapidlogo {
 	color: #222;
 	line-height: 1;
 	margin: 0px 0px 30px 10px;
