@@ -1,5 +1,6 @@
 <?php
-
+	session_start();
+	
 	require_once("class.user.php");
 	require_once("class.rapid_content.php");
 
@@ -12,13 +13,13 @@
 			$this->user = new user;
 		}
 		
-		public function content($name, $tag='div') {
-			$this->load($name);
+		public function content($name, $tag='div', $default="<h1>New Content Block.</h1>") {
+			$this->load($name, $default);
 			$this->blocks[$name]->show($tag);
 		}
 		
-		public function load($name) {
-			$this->blocks[$name] = new rapid_content($name);
+		public function load($name, $default='') {
+			$this->blocks[$name] = new rapid_content($name, $default);
 		}
 		
 		public function load_all() {
